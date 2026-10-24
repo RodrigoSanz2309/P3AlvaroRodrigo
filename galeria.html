@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Imágenes - Smart Room</title>
+    <link rel="stylesheet" href="./css/iroom.css">
+    <!-- Carga de la librería jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Contenedor principal beige */
+.galeria-contenedor {
+    position: relative;
+    max-width: 850px;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dcdcc6;
+    padding: 15px 10px;
+    border: 2px solid #a8a88a;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Visor que delimita el alto del carrusel */
+.carrusel-visor {
+    overflow: hidden;
+    width: 100%;
+    height: 140px; /* Altura fija idéntica a las tarjetas */
+    margin: 0 10px;
+}
+
+/* Tira flex con las imágenes alineadas */
+.tira-imagenes {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+    transition: transform 0.4s ease-in-out;
+}
+
+/* Marco de cada imagen con tamaño estricto */
+.tarjeta-imagen {
+    position: relative;
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    height: 140px !important;
+    box-sizing: border-box !important;
+    border: 2px solid #808080 !important;
+    border-radius: 0 !important;           /* Elimina esquinas redondeadas en el marco */
+    overflow: hidden !important;
+    cursor: pointer;
+    background-color: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Ajuste de la etiqueta img dentro de su tarjeta */
+.tarjeta-imagen img {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    object-fit: cover !important;           /* Llena los 180x140px sin distorsionar */
+    object-position: center !important;
+    border-radius: 0 !important;           /* Anula el redondeado de esquinas heredado de iroom.css */
+    border: none !important;
+}
+
+/* Capa con información sobrepuesta */
+.info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-size: 0.85em;
+    text-align: center;
+    padding: 5px;
+    display: none;
+}
+
+/* Estilo para las flechas laterales */
+.btn-desplazamiento {
+    background-color: #6b52f2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width: 50px;
+    height: 35px;
+    font-size: 1.2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.btn-desplazamiento:hover {
+    background-color: #5138d4;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Smart Room</h1>
+    </header>
+
+    <nav aria-label="Menú principal">
+        <a href="index.html" class="menu-btn">Inicio</a>
+        <a href="config.html" class="menu-btn">Configuración</a>
+        <a href="minombre.html" class="menu-btn">Nombre</a>
+        <a href="calculadora.html" class="menu-btn">Calculadora</a>
+        <a href="galeria.html" class="menu-btn active">Galería</a>
+    </nav>
+
+    <main>
+        <section style="width: 100%;">
+            <h2>Galería de Estaciones Meteorológicas</h2>
+
+            <!-- Estructura principal de la galería -->
+            <div class="galeria-contenedor">
+                <button id="btnAnterior" class="btn-desplazamiento" aria-label="Anterior">&#10094;</button>
+
+                <div class="carrusel-visor">
+                    <div id="tiraImagenes" class="tira-imagenes">
+                        <!-- Tarjeta 1 -->
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen1.jpg" alt="Estación Tormenta">
+                            <div class="info-overlay">Habitacion 1</div>
+                        </div>
+
+                        <!-- Tarjeta 2 -->
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen2.jpg" alt="Estación París">
+                            <div class="info-overlay">Habitacion 2</div>
+                        </div>
+
+                        <!-- Tarjeta 3 -->
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen3.jpg" alt="Estación Lluvia">
+                            <div class="info-overlay">Habitacion 3</div>
+                        </div>
+
+                        <!-- Tarjeta 4 -->
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen4.jpg" alt="Estación Nubes">
+                            <div class="info-overlay">Habitacion 4</div>
+                        </div>
+
+                        <!-- Tarjetas adicionales para comprobar el desplazamiento -->
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen5.jpg" alt="Estación Montaña">
+                            <div class="info-overlay">Habitacion 5</div>
+                        </div>
+
+                        <div class="tarjeta-imagen">
+                            <img src="./images/imagen6.jpg" alt="Estación Nieve">
+                            <div class="info-overlay">Habitacion 6</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btnSiguiente" class="btn-desplazamiento" aria-label="Siguiente">&#10095;</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>Universidad de Alcalá</footer>
+
+    <script src="datos.js"></script>
+</body>
+</html>

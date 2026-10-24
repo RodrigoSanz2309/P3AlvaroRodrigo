@@ -244,3 +244,52 @@ function convertirA(nuevaUnidad) {
     expresionActual = parseFloat(resultadoFinal.toFixed(2)).toString();
     actualizarPantalla();
 }
+
+
+/* =========================================================
+   APARTADO 1.2: GALERÍA DE IMÁGENES Y DESPLAZAMIENTO (JQUERY)
+   ========================================================= */
+
+$(document.ready ? $(document) : $(window)).ready(function () {
+    // 1. Mostrar información/nombre de la imagen al pasar el ratón (hover)
+    $(".tarjeta-imagen").hover(
+        function () {
+            // MouseEnter: desvanecer hacia dentro la información
+            $(this).find(".info-overlay").stop(true, true).fadeIn(200);
+            $(this).css("border-color", "#0066cc");
+        },
+        function () {
+            // MouseLeave: desvanecer hacia fuera
+            $(this).find(".info-overlay").stop(true, true).fadeOut(200);
+            $(this).css("border-color", "#808080");
+        }
+    );
+
+    // 2. Desplazamiento horizontal de imágenes (Carrusel)
+    let posicionActual = 0;
+    const pasoDesplazamiento = 195; // Ancho de tarjeta (180px) + hueco gap (15px)
+
+    $("#btnSiguiente").click(function () {
+        const anchoVisor = $(".carrusel-visor").width();
+        const anchoTotalTira = $("#tiraImagenes")[0].scrollWidth;
+        const maxDesplazamiento = -(anchoTotalTira - anchoVisor);
+
+        if (posicionActual > maxDesplazamiento) {
+            posicionActual -= pasoDesplazamiento;
+            if (posicionActual < maxDesplazamiento) {
+                posicionActual = maxDesplazamiento;
+            }
+            $("#tiraImagenes").css("transform", "translateX(" + posicionActual + "px)");
+        }
+    });
+
+    $("#btnAnterior").click(function () {
+        if (posicionActual < 0) {
+            posicionActual += pasoDesplazamiento;
+            if (posicionActual > 0) {
+                posicionActual = 0;
+            }
+            $("#tiraImagenes").css("transform", "translateX(" + posicionActual + "px)");
+        }
+    });
+});
