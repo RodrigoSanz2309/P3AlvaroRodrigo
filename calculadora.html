@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Temperaturas - Smart Room</title>
+    <link rel="stylesheet" href="./css/iroom.css">
+    <style>
+        /* Reglas aisladas para la calculadora para evitar conflictos con iroom.css */
+        .calculadora, .calculadora * {
+            box-sizing: border-box;
+        }
+
+        .calculadora {
+            width: 100%;
+            max-width: 390px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #222222;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            color: white;
+        }
+
+        .pantalla {
+            width: 100%;
+            background-color: #000000;
+            color: #00ffcc;
+            padding: 15px;
+            font-size: 1.5em;
+            text-align: right;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            min-height: 55px;
+            word-break: break-all;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pantalla .unidad {
+            font-size: 0.75em;
+            color: #ffcc00;
+            margin-left: 10px;
+        }
+
+        .botonera {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .botonera button {
+            width: 100% !important;
+            height: 48px !important;
+            font-size: 1.1em !important;
+            font-weight: bold !important;
+            border: none !important;
+            border-radius: 6px !important;
+            cursor: pointer;
+            background-color: #444444 !important;
+            color: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .botonera button:hover {
+            background-color: #666666 !important;
+        }
+
+        .botonera button.operador {
+            background-color: #f39c12 !important;
+        }
+
+        .botonera button.operador:hover {
+            background-color: #d68910 !important;
+        }
+
+        .botonera button.limpiar {
+            background-color: #e74c3c !important;
+        }
+
+        .botonera button.limpiar:hover {
+            background-color: #c0392b !important;
+        }
+
+        .seccion-conversion {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+
+        .seccion-conversion button {
+            width: 100% !important;
+            padding: 10px 2px !important;
+            font-size: 0.85em !important;
+            background-color: #2980b9 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 6px !important;
+            cursor: pointer;
+            margin: 0 !important;
+        }
+
+        .seccion-conversion button:hover {
+            background-color: #978689 !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Smart Room</h1>
+    </header>
+
+    <nav aria-label="Menú principal">
+        <a href="index.html" class="menu-btn">Inicio</a>
+        <a href="config.html" class="menu-btn">Configuración</a>
+        <a href="minombre.html" class="menu-btn">Nombre</a>
+        <a href="calculadora.html" class="menu-btn">Calculadora</a>
+    </nav>
+
+    <main>
+        <section style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <h2>Calculadora de Temperaturas</h2>
+
+            <div class="calculadora">
+                <!-- Pantalla del resultado y la unidad activa -->
+                <div class="pantalla">
+                    <span id="valorPantalla">0</span>
+                    <span id="unidadPantalla" class="unidad">°C</span>
+                </div>
+
+                <!-- Botonera de operaciones matemáticas -->
+                <div class="botonera">
+                    <button class="limpiar" onclick="limpiarPantalla()">C</button>
+                    <button onclick="presionarNumero('(')">(</button>
+                    <button onclick="presionarNumero(')')">)</button>
+                    <button class="operador" onclick="presionarOperador('/')">/</button>
+
+                    <button onclick="presionarNumero('7')">7</button>
+                    <button onclick="presionarNumero('8')">8</button>
+                    <button onclick="presionarNumero('9')">9</button>
+                    <button class="operador" onclick="presionarOperador('*')">*</button>
+
+                    <button onclick="presionarNumero('4')">4</button>
+                    <button onclick="presionarNumero('5')">5</button>
+                    <button onclick="presionarNumero('6')">6</button>
+                    <button class="operador" onclick="presionarOperador('-')">-</button>
+
+                    <button onclick="presionarNumero('1')">1</button>
+                    <button onclick="presionarNumero('2')">2</button>
+                    <button onclick="presionarNumero('3')">3</button>
+                    <button class="operador" onclick="presionarOperador('+')">+</button>
+
+                    <button onclick="presionarNumero('0')">0</button>
+                    <button onclick="presionarNumero('.')">.</button>
+                    <button class="operador" style="grid-column: span 2;" onclick="calcularResultado()">=</button>
+                </div>
+
+                <!-- Conversión directa de escalas -->
+                <div class="seccion-conversion">
+                    <button onclick="convertirA('C')">a °Celsius</button>
+                    <button onclick="convertirA('F')">a °Fahrenheit</button>
+                    <button onclick="convertirA('K')">a Kelvin</button>
+                </div>
+            </div>
+
+            <p><a href="index.html">Volver a la página principal</a></p>
+        </section>
+    </main>
+
+    <footer>Universidad de Alcalá</footer>
+
+    <script src="datos.js"></script>
+</body>
+</html>

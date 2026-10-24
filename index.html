@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Room</title>
+    <link rel="stylesheet" href="./css/iroom.css">
+</head>
+
+<body>
+    <header>
+        <h1>Smart Room</h1>
+    </header>
+    <p id="fechaHora"></p>
+
+    <div class="barra">
+        <nav aria-label="Menú principal">
+            <a href="index.html" class="menu-btn">Inicio</a>
+            <a href="config.html" class="menu-btn">Configuración</a>
+            <a href="minombre.html" class="menu-btn">Nombre</a>
+            <a href="calculadora.html" class="menu-btn">Calculadora</a>
+        </nav>
+
+    <aside>
+        <h2>Info complementaria</h2>
+        <p id="saludo"></p>
+    </aside>
+    </div>
+    <main class="inicio">
+        <section>
+            <h2>Datos de la habitación</h2>
+            <ul>
+                <li>País: España</li>
+                <li>Ciudad: Alcalá de Henares</li>
+                <li>Mapa URL: <a href="https://www.google.com/maps/place/Alcal%C3%A1+de+Henares,+Madrid/@40.4819949,-3.364155,12z/data=!3m1!4b1!4m6!3m5!1s0xd4228f7c2e7d8d5:0x400bd2ce0c6e0f0!8m2!3d40.4819949!4d-3.364155!16zL20vMDJkZ2E?entry=ttu" target="_blank" rel="noopener noreferrer">Ver localización en Google Maps</a></li>
+                <li>Coordenadas GPS: 40.4819949, -3.364155</li>
+            </ul>
+            <img src="images/imagen2.jpg" alt="Dormitorio con cama doble">
+        </section>
+
+        <section>
+            <h2>Info sensores</h2>
+            <p>Aquí se mostrarán los datos de los sensores seleccionados.</p>
+        </section>
+    </main>
+
+    <footer>Universidad de Alcalá</footer>
+
+
+
+    <script>
+        function actualizarFechaHora() {
+            document.getElementById("fechaHora").textContent = new Date().toLocaleString();
+        }
+
+        actualizarFechaHora();
+        setInterval(actualizarFechaHora, 1000);
+
+        function mostrarSaludo() {
+            const nombre = localStorage.getItem("fname");
+            const saludo = document.getElementById("saludo");
+            saludo.textContent = nombre ? "Hola " + nombre + ": Bienvenido a Smart Room.":"";
+        }
+
+        mostrarSaludo();
+        window.addEventListener("pageshow", mostrarSaludo);
+        window.addEventListener("storage", mostrarSaludo);
+
+
+    </script>
+        
+</body>
+</html>
