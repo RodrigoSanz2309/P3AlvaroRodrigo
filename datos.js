@@ -255,7 +255,7 @@ $(document.ready ? $(document) : $(window)).ready(function () {
     $(".tarjeta-imagen").hover(
         function () {
             // MouseEnter: desvanecer hacia dentro la información
-            $(this).find(".info-overlay").stop(true, true).fadeIn(200);
+            $(this).find(".info-overlay").stop(true, true).fadeIn(100);
             $(this).css("border-color", "#0066cc");
         },
         function () {
@@ -293,3 +293,53 @@ $(document.ready ? $(document) : $(window)).ready(function () {
         }
     });
 });
+
+/* =========================================================
+   APARTADO 1.3: MUESTRA DE TABLAS PAGINADAS Y FORMATEO JQUERY
+   ========================================================= */
+
+$(document).ready(function () {
+    // 1. Formatear dinámicamente las tablas con selectores jQuery al cargar
+    formatearTablasConJQuery();
+
+    // 2. Evento clic sobre los botones de paginación
+    $(".btn-pagina").click(function () {
+        const numPagina = $(this).data("pagina");
+
+        // Ocultar todas las páginas y quitar estado activo a botones
+        $(".tabla-pagina").hide();
+        $(".btn-pagina").removeClass("activo");
+
+        // Mostrar solo el contenedor seleccionado y activar el botón
+        $("#pagina-" + numPagina).fadeIn(300);
+        $(this).addClass("activo");
+    });
+});
+
+/**
+ * Aplica estilos dinámicos a las tablas estáticas usando selectores jQuery
+ */
+function formatearTablasConJQuery() {
+    // Formatear encabezados de todas las tablas
+    $(".tabla-estaciones th").css({
+        "background-color": "#e0e0e0",
+        "font-weight": "bold",
+        "border-bottom": "2px solid #555"
+    });
+
+    // Aplicar colores alternos (zebra striping) con selectores :even y :odd
+    $(".tabla-estaciones tbody tr:even").css("background-color", "#ffffff");
+    $(".tabla-estaciones tbody tr:odd").css("background-color", "#e8e8d8");
+
+    // Dar formato visual a las celdas del "Color de Iluminación" (última columna)
+    $(".tabla-estaciones tbody tr").each(function () {
+        const celdaColor = $(this).find("td:last-child");
+        const codigoHex = celdaColor.text().trim();
+        
+        // Asignar tipografía monoespaciada para la visualización del hexadecimal
+        celdaColor.css({
+            "font-family": "monospace",
+            "font-weight": "bold"
+        });
+    });
+}
