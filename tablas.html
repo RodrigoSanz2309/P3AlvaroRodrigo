@@ -18,27 +18,10 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        /* Estilo base sin formateo avanzado en HTML */
-        .tabla-estaciones {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-        }
-
-        .tabla-estaciones th, .tabla-estaciones td {
-            padding: 10px;
-            border: 1px solid #777;
-        }
-
-        /* Contenedores de cada página */
+        /* Contenedores de cada página: ocultos hasta que jQuery muestra uno.
+           Las tablas NO llevan formato aquí: se lo da jQuery al visualizar la página. */
         .tabla-pagina {
-            display: none; /* Se ocultan por defecto excepto la primera mediante jQuery/CSS */
-        }
-
-        #pagina-1 {
-            display: block; /* Muestra la primera página al inicio */
+            display: none;
         }
 
         /* Barra de navegación de paginación */
@@ -99,11 +82,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Habitacion 1</td><td>25</td><td>48</td><td>150</td><td>120</td><td>negro</td></tr>
-                            <tr><td>Habitacion 2</td><td>30</td><td>69</td><td>180</td><td>211</td><td>rojo</td></tr>
-                            <tr><td>Habitacion 3</td><td>35</td><td>30</td><td>50</td><td>150</td><td>verde</td></tr>
-                            <tr><td>Habitacion 4</td><td>18</td><td>42</td><td>211</td><td>180</td><td>azul</td></tr>
-                            <tr><td>Habitacion 5</td><td>35</td><td>41</td><td>150</td ><td>100</td><td>blanco</td></tr >
+                            <tr><td>Alcalá de H.</td><td>25</td><td>48</td><td>150</td><td>120</td><td>000000</td></tr>
+                            <tr><td>Alicante</td><td>30</td><td>69</td><td>180</td><td>211</td><td>FF0000</td></tr>
+                            <tr><td>Badajoz</td><td>35</td><td>30</td><td>50</td><td>150</td><td>00FF00</td></tr>
+                            <tr><td>Burgos</td><td>18</td><td>42</td><td>211</td><td>180</td><td>0000FF</td></tr>
+                            <tr><td>Córdoba</td><td>35</td><td>41</td><td>150</td><td>50</td><td>FFFFFF</td></tr>
+                        </tbody>
                     </table>
                 </div>
 
@@ -121,11 +105,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Habitacion 1</td><td>28</td><td>52</td><td>130</td><td>190</td><td>azul</td></tr>
-                            <tr><td>Habitacion 2</td><td>22</td><td>45</td><td>110</td><td>160</td><td>verde</td></tr>
-                            <tr><td>Habitacion 3</td><td>31</td><td>60</td><td>140</td><td>220</td><td>rojo</td></tr>
-                            <tr><td>Habitacion 4</td><td>33</td><td>38</td><td>160</td><td>200</td><td>amarillo</td></tr>
-                            <tr><td>Habitacion 5</td><td>17</td><td>50</td><td>90</td><td>140</td><td>violeta</td></tr>
+                            <tr><td>Granada</td><td>28</td><td>52</td><td>130</td><td>190</td><td>FFFF00</td></tr>
+                            <tr><td>Huelva</td><td>31</td><td>60</td><td>140</td><td>220</td><td>FFA500</td></tr>
+                            <tr><td>León</td><td>16</td><td>55</td><td>90</td><td>140</td><td>800080</td></tr>
+                            <tr><td>Madrid</td><td>27</td><td>40</td><td>210</td><td>180</td><td>00FFFF</td></tr>
+                            <tr><td>Málaga</td><td>29</td><td>65</td><td>170</td><td>230</td><td>FF00FF</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -144,11 +128,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Habitacion 1</td><td>27</td><td>40</td><td>190</td><td>180</td><td>verde</td></tr>
-                            <tr><td>Habitacion 2</td><td>29</td><td>65</td><td>170</td><td>230</td><td>amarillo</td></tr>
-                            <tr><td>Habitacion 3</td><td>34</td><td>35</td><td>165</td><td>210</td><td>azul</td></tr>
-                            <tr><td>Habitacion 4</td><td>19</td><td>75</td><td>85</td><td>110</td><td>violeta</td></tr>
-                            <tr><td>Habitacion 5</td><td>21</td><td>58</td><td>120</td><td>150</td><td>rojo</td></tr >
+                            <tr><td>Murcia</td><td>33</td><td>38</td><td>160</td><td>200</td><td>008000</td></tr>
+                            <tr><td>Oviedo</td><td>17</td><td>75</td><td>85</td><td>110</td><td>000080</td></tr>
+                            <tr><td>Palencia</td><td>19</td><td>50</td><td>95</td><td>150</td><td>808080</td></tr>
+                            <tr><td>Salamanca</td><td>21</td><td>46</td><td>120</td><td>165</td><td>800000</td></tr>
+                            <tr><td>Santander</td><td>20</td><td>72</td><td>110</td><td>130</td><td>C0C0C0</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -167,11 +151,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Habitacion 1</td><td>20</td><td>46</td><td>105</td><td>165</td><td>granate</td></tr>
-                            <tr><td>Habitacion 2</td><td>36</td><td>32</td><td>175</td><td>240</td><td>verde</td></tr>
-                            <tr><td>Habitacion 3</td><td>29</td><td>41</td><td>145</td><td>185</td><td>azul</td></tr>
-                            <tr><td>Habitacion 4</td><td>31</td><td>63</td><td>180</td><td>215</td><td>amarillo</td></tr>
-                            <tr><td>Habitacion 5</td><td>26</td><td>49</td><td>155</td><td>175</td><td>violeta</td></tr>
+                            <tr><td>Sevilla</td><td>36</td><td>32</td><td>175</td><td>240</td><td>FFD700</td></tr>
+                            <tr><td>Toledo</td><td>31</td><td>37</td><td>145</td><td>185</td><td>4B0082</td></tr>
+                            <tr><td>Valencia</td><td>29</td><td>63</td><td>180</td><td>215</td><td>40E0D0</td></tr>
+                            <tr><td>Valladolid</td><td>22</td><td>49</td><td>155</td><td>175</td><td>FF69B4</td></tr>
+                            <tr><td>Zaragoza</td><td>26</td><td>44</td><td>165</td><td>195</td><td>A52A2A</td></tr>
+                        </tbody>
                     </table>
                 </div>
 

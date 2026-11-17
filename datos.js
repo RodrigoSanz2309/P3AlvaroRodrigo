@@ -250,7 +250,7 @@ function convertirA(nuevaUnidad) {
    APARTADO 1.2: GALERÍA DE IMÁGENES Y DESPLAZAMIENTO (JQUERY)
    ========================================================= */
 
-$(document.ready ? $(document) : $(window)).ready(function () {
+$(document).ready(function () {
     // 1. Mostrar información/nombre de la imagen al pasar el ratón (hover)
     $(".tarjeta-imagen").hover(
         function () {
@@ -296,50 +296,90 @@ $(document.ready ? $(document) : $(window)).ready(function () {
 
 /* =========================================================
    APARTADO 1.3: MUESTRA DE TABLAS PAGINADAS Y FORMATEO JQUERY
+   Las tablas están sin formato en el HTML. El formato se aplica
+   con selectores jQuery en el momento de visualizar cada página.
    ========================================================= */
 
 $(document).ready(function () {
-    // 1. Formatear dinámicamente las tablas con selectores jQuery al cargar
-    formatearTablasConJQuery();
+    // Solo se ejecuta en tablas.html (si no hay paginador, no hace nada)
+    if ($(".tabla-pagina").length === 0) return;
 
-    // 2. Evento clic sobre los botones de paginación
+    // Al cargar, se muestra la primera página
+    mostrarPagina(1);
+
+    // Evento clic sobre los botones de paginación
     $(".btn-pagina").click(function () {
-        const numPagina = $(this).data("pagina");
-
-        // Ocultar todas las páginas y quitar estado activo a botones
-        $(".tabla-pagina").hide();
-        $(".btn-pagina").removeClass("activo");
-
-        // Mostrar solo el contenedor seleccionado y activar el botón
-        $("#pagina-" + numPagina).fadeIn(300);
-        $(this).addClass("activo");
+        mostrarPagina($(this).data("pagina"));
     });
 });
 
 /**
- * Aplica estilos dinámicos a las tablas estáticas usando selectores jQuery
+ * Oculta todas las páginas, formatea la página pedida y la muestra
  */
-function formatearTablasConJQuery() {
-    // Formatear encabezados de todas las tablas
-    $(".tabla-estaciones th").css({
+function mostrarPagina(numPagina) {
+    const pagina = $("#pagina-" + numPagina);
+
+    $(".tabla-pagina").hide();
+    $(".btn-pagina").removeClass("activo");
+    $(".btn-pagina[data-pagina='" + numPagina + "']").addClass("activo");
+
+    formatearTabla(pagina);
+    pagina.fadeIn(300);
+}
+
+/**
+ * Aplica estilos a la tabla de un contenedor usando selectores jQuery
+ */
+function formatearTabla(contenedor) {
+    const tabla = contenedor.find("table");
+
+    // Tabla general
+    tabla.css({
+        "width": "100%",
+        "border-collapse": "collapse",
+        "text-align": "center",
+        "font-family": "Arial, sans-serif",
+        "background-color": "#ffffff"
+    });
+
+    // Todas las celdas (cabecera y datos)
+    tabla.find("th, td").css({
+        "padding": "10px",
+        "border": "1px solid #777"
+    });
+
+    // Cabecera
+    tabla.find("thead th").css({
         "background-color": "#e0e0e0",
         "font-weight": "bold",
         "border-bottom": "2px solid #555"
     });
 
-    // Aplicar colores alternos (zebra striping) con selectores :even y :odd
-    $(".tabla-estaciones tbody tr:even").css("background-color", "#ffffff");
-    $(".tabla-estaciones tbody tr:odd").css("background-color", "#e8e8d8");
+    // Filas alternas (zebra) con los filtros :even y :odd
+    tabla.find("tbody tr").filter(":even").css("background-color", "#ffffff");
+    tabla.find("tbody tr").filter(":odd").css("background-color", "#e8e8d8");
 
-    // Dar formato visual a las celdas del "Color de Iluminación" (última columna)
-    $(".tabla-estaciones tbody tr").each(function () {
-        const celdaColor = $(this).find("td:last-child");
-        const codigoHex = celdaColor.text().trim();
-        
-        // Asignar tipografía monoespaciada para la visualización del hexadecimal
-        celdaColor.css({
-            "font-family": "monospace",
-            "font-weight": "bold"
-        });
+    // Columna "Color de Iluminación": código en monoespaciada y muestra del color
+    tabla.find("tbody td:last-child").each(function () {
+        const celda = $(this);
+        const codigoHex = celda.text().trim();
+
+        celda.css({ "font-family": "monospace", "font-weight": "bold" });
+
+        // Se añade un cuadrado con el color (solo la primera vez que se formatea)
+        if (celda.find(".muestra-color").length === 0) {
+            $("<span>")
+                .addClass("muestra-color")
+                .css({
+                    "display": "inline-block",
+                    "width": "14px",
+                    "height": "14px",
+                    "margin-right": "6px",
+                    "vertical-align": "middle",
+                    "border": "1px solid #333",
+                    "background-color": "#" + codigoHex
+                })
+                .prependTo(celda);
+        }
     });
 }
