@@ -383,3 +383,66 @@ function formatearTabla(contenedor) {
         }
     });
 }
+
+
+/* =========================================================
+   APARTADO 2.1: SELECT DE CIUDADES CONDICIONADO AL PAÍS (AJAX)
+   Cada país tiene un fichero de texto plano en ciudades/
+   (espana.txt, francia.txt, ...) con una ciudad por línea.
+   Al cambiar el país se pide su fichero al servidor con Ajax
+   y se rellena el <select> de ciudades con la respuesta.
+   ========================================================= */
+
+$(document).ready(function () {
+    // Solo se ejecuta en config.html
+    if ($("select#pais").length === 0) return;
+
+    $("#pais").change(function () {
+        cargarCiudades($(this).val());
+    });
+});
+
+function cargarCiudades(pais) {
+    const selectCiudad = $("#ciudad");
+    const estado = $("#estadoCiudades");
+
+    // Se vacía el select antes de cada carga
+    selectCiudad.empty();
+
+    // Si no hay país elegido, se deja el select desactivado
+    if (pais === "") {
+        selectCiudad.append($("<option>").val("").text("-- Primero elige un país --"));
+        selectCiudad.prop("disabled", true);
+        estado.text("");
+        return;
+    }
+
+    selectCiudad.prop("disabled", true);
+    estado.text("Cargando ciudades...");
+
+    // Petición Ajax al servidor: GET del fichero de texto del país
+    $.ajax({
+        url: "ciudades/" + pais + ".txt",
+        type: "GET",
+        dataType: "text",
+        cache: false
+    })
+    .done(function (respuesta) {
+        // La respuesta es el texto del fichero: una ciudad por línea
+        const ciudades = respuesta.split("\n")
+            .map(function (linea) { return linea.trim(); })
+            .filter(function (linea) { return linea !== ""; });
+
+        selectCiudad.append($("<option>").val("").text("-- Selecciona una ciudad --"));
+        $.each(ciudades, function (i, ciudad) {
+            selectCiudad.append($("<option>").val(ciudad).text(ciudad));
+        });
+
+        selectCiudad.prop("disabled", false);
+        estado.text("");
+    })
+    .fail(function (xhr) {
+        selectCiudad.append($("<option>").val("").text("-- Error al cargar --"));
+        estado.text("No se pudieron cargar las ciudades (error " + xhr.status + ").");
+    });
+}

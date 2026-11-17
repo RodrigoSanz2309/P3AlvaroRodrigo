@@ -29,15 +29,20 @@
                 <h2>Datos de la habitación</h2>
 
                 <label for="pais">País:</label>
-                <input type="text" id="pais" name="pais" placeholder="Introduzca su país" autocomplete="off">
+                <select id="pais" name="pais">
+                    <option value="">-- Selecciona un país --</option>
+                    <option value="espana">España</option>
+                    <option value="francia">Francia</option>
+                    <option value="portugal">Portugal</option>
+                    <option value="italia">Italia</option>
+                </select>
 
-
-
-
+                <!-- Apartado 2.1: las ciudades se cargan con Ajax según el país elegido -->
                 <label for="ciudad">Ciudad:</label>
-                <input type="text" id="ciudad" name="ciudad" placeholder="Selecciona una ciudad" list="lista-ciudades" autocomplete="off">
-                <datalist id="lista-ciudades">
-                </datalist>
+                <select id="ciudad" name="ciudad" disabled>
+                    <option value="">-- Primero elige un país --</option>
+                </select>
+                <span id="estadoCiudades"></span>
 
 
 
@@ -132,25 +137,7 @@
         const modalMensaje=document.getElementById("modal-mensaje");
         const botonCerrar = document.getElementById("modal-cerrar");
 
-            const CIUDADES = {
-                "España": ["Madrid", "Barcelona", "Valencia"],
-                "Francia": ["París", "Lyon", "Marsella"],
-                "Portugal": ["Lisboa", "Oporto", "Braga"]
-            };
-
-            const inputPais = document.getElementById("pais");
-            const listaCiudades = document.getElementById("lista-ciudades");
-
-            function actualizarCiudades() {
-                listaCiudades.innerHTML = "";
-                const ciudades = CIUDADES[inputPais.value] || [];
-                ciudades.forEach(function(ciudad){
-                    const opcion = document.createElement("option");
-                    opcion.value = ciudad;
-                    listaCiudades.appendChild(opcion);                 
-                });
-            }
-            inputPais.addEventListener("input", actualizarCiudades);
+            // Apartado 2.1: la carga de ciudades con Ajax está en datos.js (cargarCiudades)
 
             const inputMax = document.getElementById("tempMax");
             const inputMin = document.getElementById("tempMin");
@@ -216,10 +203,10 @@
             formulario.addEventListener("submit", function(evento){
                 const errores =[];
                 const avisos = [];
-                const paisIntroducido = document.getElementById("pais").value;
-                const paisPermitido = Object.keys(CIUDADES).map(function(p){return p.toLowerCase();});
-                if (!paisPermitido.includes(paisIntroducido.trim().toLowerCase())){
-                    errores.push("País no válido. Los países admitidos son: " + Object.keys(CIUDADES).join(", "));
+                if (document.getElementById("pais").value === "") {
+                    errores.push("Selecciona un país.");
+                } else if (document.getElementById("ciudad").value === "") {
+                    errores.push("Selecciona una ciudad.");
                 }
                         const tempActual =parseFloat(document.getElementById("tempActual").value);
         if(isNaN(tempActual)){
