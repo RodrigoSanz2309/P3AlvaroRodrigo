@@ -314,7 +314,9 @@ $(document).ready(function () {
 });
 
 /**
- * Oculta todas las páginas, formatea la página pedida y la muestra
+ * Oculta todas las páginas y muestra la pedida.
+ * Las páginas 1 y 2 ya están en el HTML. Las páginas 3 y 4 se piden
+ * al servidor con Ajax (apartado 2.2) y se muestran cuando llegan los datos.
  */
 function mostrarPagina(numPagina) {
     const pagina = $("#pagina-" + numPagina);
@@ -323,8 +325,19 @@ function mostrarPagina(numPagina) {
     $(".btn-pagina").removeClass("activo");
     $(".btn-pagina[data-pagina='" + numPagina + "']").addClass("activo");
 
-    formatearTabla(pagina);
-    pagina.fadeIn(300);
+    // Lo que se hace cuando la tabla ya tiene sus filas
+    function visualizar() {
+        formatearTabla(pagina);
+        pagina.fadeIn(300);
+    }
+
+    if (numPagina == 3) {
+        cargarPaginaXML(pagina, visualizar);
+    } else if (numPagina == 4) {
+        cargarPaginaJSON(pagina, visualizar);
+    } else {
+        visualizar();
+    }
 }
 
 /**
@@ -445,4 +458,98 @@ function cargarCiudades(pais) {
         selectCiudad.append($("<option>").val("").text("-- Error al cargar --"));
         estado.text("No se pudieron cargar las ciudades (error " + xhr.status + ").");
     });
+}
+
+
+
+/* =========================================================
+   APARTADO 2.2: TABLAS CON AJAX
+   - Página 3: fichero XML, tratado SOLO con JavaScript
+     (XMLHttpRequest + DOM, sin jQuery).
+   - Página 4: fichero JSON, tratado con jQuery ($.ajax).
+   Los datos recibidos se guardan en variables (datosXML, datosJSON)
+   para poder consultarlos después (por ejemplo, para el histograma).
+   ========================================================= */
+
+let datosXML = [];
+let datosJSON = [];
+
+/**
+ * Página 3: pide datos/pagina3.xml con XMLHttpRequest y crea las filas con el DOM
+ */
+function cargarPaginaXML(pagina, alTerminar) {
+    const tbody = pagina[0].querySelector("tbody");
+    const xhr = new XMLHttpRequest();
+
+    // Se añade la hora a la URL para que el navegador no use una copia en caché
+    xhr.open("GET", "datos/pagina3.xml?t=" + Date.now(), true);
+
+    xhr.onreadystatechange = function () {
+        // readyState 4 = la respuesta ha llegado completa
+        if (xhr.readyState !== 4) return;
+
+        tbody.innerHTML = "";
+
+        if (xhr.status === 200 && xhr.responseXML) {
+            // responseXML es el documento XML ya convertido en un árbol DOM
+            const estaciones = xhr.responseXML.getElementsByTagName("estacion");
+            const campos = ["ciudad", "temperatura", "humedad", "ruido", "luz", "color"];
+            datosXML = [];
+
+            for (let i = 0; i < estaciones.length; i++) {
+                const fila = document.createElement("tr");
+                const registro = {};
+
+                for (let j = 0; j < campos.length; j++) {
+                    const valor = estaciones[i].getElementsByTagName(campos[j])[0].textContent;
+                    const celda = document.createElement("td");
+                    celda.textContent = valor;
+                    fila.appendChild(celda);
+                    registro[campos[j]] = valor;
+                }
+
+                tbody.appendChild(fila);
+                datosXML.push(registro);
+            }
+        } else {
+            tbody.innerHTML = "<tr><td colspan='6'>Error al cargar el XML (" + xhr.status + ")</td></tr>";
+        }
+
+        alTerminar();
+    };
+
+    xhr.send();
+}
+
+/**
+ * Página 4: pide datos/pagina4.json con jQuery y crea las filas con jQuery
+ */
+function cargarPaginaJSON(pagina, alTerminar) {
+    const tbody = pagina.find("tbody");
+
+    $.ajax({
+        url: "datos/pagina4.json",
+        type: "GET",
+        dataType: "json",   // jQuery convierte el texto JSON en un objeto JavaScript
+        cache: false
+    })
+    .done(function (respuesta) {
+        tbody.empty();
+        datosJSON = respuesta.estaciones;
+
+        $.each(datosJSON, function (i, est) {
+            const fila = $("<tr>");
+            fila.append($("<td>").text(est.ciudad));
+            fila.append($("<td>").text(est.temperatura));
+            fila.append($("<td>").text(est.humedad));
+            fila.append($("<td>").text(est.ruido));
+            fila.append($("<td>").text(est.luz));
+            fila.append($("<td>").text(est.color));
+            tbody.append(fila);
+        });
+    })
+    .fail(function (xhr) {
+        tbody.html("<tr><td colspan='6'>Error al cargar el JSON (" + xhr.status + ")</td></tr>");
+    })
+    .always(alTerminar);
 }
