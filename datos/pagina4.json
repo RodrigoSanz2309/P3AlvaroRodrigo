@@ -1,0 +1,44 @@
+{
+    "estaciones": [
+        {
+            "ciudad": "Sevilla",
+            "temperatura": 36,
+            "humedad": 32,
+            "ruido": 175,
+            "luz": 240,
+            "color": "FFD700"
+        },
+        {
+            "ciudad": "Toledo",
+            "temperatura": 31,
+            "humedad": 37,
+            "ruido": 145,
+            "luz": 185,
+            "color": "4B0082"
+        },
+        {
+            "ciudad": "Valencia",
+            "temperatura": 29,
+            "humedad": 63,
+            "ruido": 180,
+            "luz": 215,
+            "color": "40E0D0"
+        },
+        {
+            "ciudad": "Valladolid",
+            "temperatura": 22,
+            "humedad": 49,
+            "ruido": 155,
+            "luz": 175,
+            "color": "FF69B4"
+        },
+        {
+            "ciudad": "Zaragoza",
+            "temperatura": 26,
+            "humedad": 44,
+            "ruido": 165,
+            "luz": 195,
+            "color": "A52A2A"
+        }
+    ]
+}

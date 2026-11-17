@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Apartado 2.2: datos de la página 3 de tablas.html (se cargan con XMLHttpRequest) -->
+<estaciones>
+    <estacion>
+        <ciudad>Murcia</ciudad>
+        <temperatura>33</temperatura>
+        <humedad>38</humedad>
+        <ruido>160</ruido>
+        <luz>200</luz>
+        <color>008000</color>
+    </estacion>
+    <estacion>
+        <ciudad>Oviedo</ciudad>
+        <temperatura>17</temperatura>
+        <humedad>75</humedad>
+        <ruido>85</ruido>
+        <luz>110</luz>
+        <color>000080</color>
+    </estacion>
+    <estacion>
+        <ciudad>Palencia</ciudad>
+        <temperatura>19</temperatura>
+        <humedad>50</humedad>
+        <ruido>95</ruido>
+        <luz>150</luz>
+        <color>808080</color>
+    </estacion>
+    <estacion>
+        <ciudad>Salamanca</ciudad>
+        <temperatura>21</temperatura>
+        <humedad>46</humedad>
+        <ruido>120</ruido>
+        <luz>165</luz>
+        <color>800000</color>
+    </estacion>
+    <estacion>
+        <ciudad>Santander</ciudad>
+        <temperatura>20</temperatura>
+        <humedad>72</humedad>
+        <ruido>110</ruido>
+        <luz>130</luz>
+        <color>C0C0C0</color>
+    </estacion>
+</estaciones>
