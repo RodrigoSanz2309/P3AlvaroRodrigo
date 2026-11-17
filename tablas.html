@@ -46,6 +46,52 @@
             background-color: #5c85b0;
             color: #ffffff;
         }
+
+        /* Apartado 2.3: histograma (sin librerías externas) */
+        #histograma {
+            display: none;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border: 1px solid #777;
+            padding: 15px 20px;
+        }
+
+        #histograma-titulo {
+            margin: 0 0 12px 0;
+            text-align: center;
+        }
+
+        .fila-histograma {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+        }
+
+        .etiqueta-histograma {
+            width: 110px;
+            flex-shrink: 0;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .pista-histograma {
+            flex: 1;
+            background-color: #eeeeee;
+            height: 22px;
+        }
+
+        .barra-histograma {
+            height: 100%;
+            width: 0;
+            background-color: #5c85b0;
+            color: #ffffff;
+            font-size: 0.85em;
+            line-height: 22px;
+            text-align: right;
+            padding-right: 6px;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +204,13 @@
                     <button class="btn-pagina" data-pagina="2">Página 2</button>
                     <button class="btn-pagina" data-pagina="3">Página 3</button>
                     <button class="btn-pagina" data-pagina="4">Página 4</button>
+                </div>
+
+                <!-- Apartado 2.3: contenedor del histograma.
+                     Dentro se crea un contenedor por cada ciudad a representar. -->
+                <div id="histograma">
+                    <h3 id="histograma-titulo"></h3>
+                    <div id="histograma-barras"></div>
                 </div>
 
             </div>

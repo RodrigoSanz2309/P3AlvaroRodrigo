@@ -304,6 +304,9 @@ $(document).ready(function () {
     // Solo se ejecuta en tablas.html (si no hay paginador, no hace nada)
     if ($(".tabla-pagina").length === 0) return;
 
+    // Apartado 2.3: fila de checkboxes "Mostrar histograma" en cada tabla
+    crearFilaCheckboxes();
+
     // Al cargar, se muestra la primera página
     mostrarPagina(1);
 
@@ -320,6 +323,7 @@ $(document).ready(function () {
  */
 function mostrarPagina(numPagina) {
     const pagina = $("#pagina-" + numPagina);
+    paginaActual = Number(numPagina);
 
     $(".tabla-pagina").hide();
     $(".btn-pagina").removeClass("activo");
@@ -329,6 +333,7 @@ function mostrarPagina(numPagina) {
     function visualizar() {
         formatearTabla(pagina);
         pagina.fadeIn(300);
+        actualizarHistograma();   // apartado 2.3
     }
 
     if (numPagina == 3) {
@@ -552,4 +557,140 @@ function cargarPaginaJSON(pagina, alTerminar) {
         tbody.html("<tr><td colspan='6'>Error al cargar el JSON (" + xhr.status + ")</td></tr>");
     })
     .always(alTerminar);
+}
+
+
+
+/* =========================================================
+   APARTADO 2.3: VISUALIZACIÓN DE DATOS CON UN HISTOGRAMA
+   - Bajo la cabecera de cada tabla hay una fila con un checkbox
+     por columna numérica. Solo puede haber uno marcado.
+   - Al marcar uno se dibuja un histograma de esa columna con los
+     datos de la página visible: una fila por ciudad, con una barra
+     cuyo ancho depende del valor. Sin librerías externas.
+   ========================================================= */
+
+let paginaActual = 1;
+let columnaSeleccionada = null;   // null = ningún checkbox marcado
+
+// Columnas que se pueden representar (orden de las columnas de la tabla)
+const COLUMNAS = [
+    { clave: "temperatura", titulo: "Temperatura (ºC)" },
+    { clave: "humedad",     titulo: "Humedad (%)" },
+    { clave: "ruido",       titulo: "Ruido" },
+    { clave: "luz",         titulo: "Nivel de luz" }
+];
+
+/**
+ * Añade a la cabecera de cada tabla la fila "Mostrar histograma"
+ * con un checkbox por columna numérica (la de color lleva un guion)
+ */
+function crearFilaCheckboxes() {
+    $(".tabla-estaciones thead").each(function () {
+        const fila = $("<tr>").addClass("fila-checkboxes");
+        fila.append($("<th>").text("Mostrar histograma"));
+
+        $.each(COLUMNAS, function (i, col) {
+            const checkbox = $("<input>")
+                .attr("type", "checkbox")
+                .addClass("chk-histograma")
+                .attr("data-columna", col.clave)
+                .attr("title", "Histograma de " + col.titulo);
+            fila.append($("<th>").append(checkbox));
+        });
+
+        fila.append($("<th>").text("-"));
+        $(this).append(fila);
+    });
+
+    // Evento: al marcar o desmarcar un checkbox de cualquier tabla
+    $(".chk-histograma").change(function () {
+        if ($(this).is(":checked")) {
+            columnaSeleccionada = $(this).data("columna");
+        } else {
+            columnaSeleccionada = null;
+        }
+        actualizarHistograma();
+    });
+}
+
+/**
+ * Deja marcado solo el checkbox de la columna seleccionada
+ * y dibuja (o esconde) el histograma
+ */
+function actualizarHistograma() {
+    // Solo uno marcado: se marcan los de la columna elegida y se desmarcan los demás
+    $(".chk-histograma").each(function () {
+        $(this).prop("checked", $(this).data("columna") === columnaSeleccionada);
+    });
+
+    if (columnaSeleccionada === null) {
+        $("#histograma").slideUp(200);
+        return;
+    }
+
+    dibujarHistograma(columnaSeleccionada);
+}
+
+/**
+ * Devuelve los datos de la página visible como una lista de objetos
+ * { ciudad, temperatura, humedad, ruido, luz, color }.
+ * Páginas 3 y 4: variables rellenadas por Ajax (datosXML, datosJSON).
+ * Páginas 1 y 2: se leen de las filas de la tabla con jQuery.
+ */
+function obtenerDatosPagina(numPagina) {
+    if (numPagina === 3) return datosXML;
+    if (numPagina === 4) return datosJSON;
+
+    const datos = [];
+    $("#pagina-" + numPagina + " tbody tr").each(function () {
+        const celdas = $(this).find("td");
+        datos.push({
+            ciudad:      celdas.eq(0).text(),
+            temperatura: celdas.eq(1).text(),
+            humedad:     celdas.eq(2).text(),
+            ruido:       celdas.eq(3).text(),
+            luz:         celdas.eq(4).text(),
+            color:       celdas.eq(5).text().trim()
+        });
+    });
+    return datos;
+}
+
+/**
+ * Dibuja el histograma de una columna: cambia el título del contenedor
+ * y crea una fila por ciudad con una barra de ancho proporcional al valor
+ */
+function dibujarHistograma(clave) {
+    const datos = obtenerDatosPagina(paginaActual);
+    const columna = COLUMNAS.find(function (c) { return c.clave === clave; });
+    const contenedorBarras = $("#histograma-barras");
+
+    // 1. Título del histograma
+    $("#histograma-titulo").text(columna.titulo + " - Página " + paginaActual);
+
+    // 2. Valor máximo, para que la barra más larga ocupe todo el ancho
+    let maximo = 0;
+    $.each(datos, function (i, est) {
+        maximo = Math.max(maximo, parseFloat(est[clave]));
+    });
+
+    // 3. Una fila por ciudad: etiqueta + barra
+    contenedorBarras.empty();
+    $.each(datos, function (i, est) {
+        const valor = parseFloat(est[clave]);
+        const porcentaje = maximo > 0 ? (valor / maximo) * 100 : 0;
+
+        const barra = $("<div>").addClass("barra-histograma").text(valor);
+        const fila = $("<div>").addClass("fila-histograma")
+            .append($("<span>").addClass("etiqueta-histograma").text(est.ciudad))
+            .append($("<div>").addClass("pista-histograma").append(barra));
+
+        contenedorBarras.append(fila);
+
+        // El ancho de la barra crece con una animación de jQuery
+        barra.animate({ width: porcentaje + "%" }, 500);
+    });
+
+    $("#histograma").slideDown(200);
 }
